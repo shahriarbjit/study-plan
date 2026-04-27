@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90-Day Developer Growth Plan — Full Stack + AI + Soft Skills</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #141417;
+    --surface2: #1a1a1f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e6e0;
+    --muted: #6b6a65;
+    --hint: #3a3a3f;
+
+    --p1: #c8f97a;   /* teal-green — Phase 1 */
+    --p1d: #8ab84a;
+    --p1bg: rgba(200,249,122,0.07);
+
+    --p2: #7eb8ff;   /* blue — Phase 2 */
+    --p2d: #4d8fd6;
+    --p2bg: rgba(126,184,255,0.07);
+
+    --p3: #ffb86a;   /* amber — Phase 3 */
+    --p3d: #c8842a;
+    --p3bg: rgba(255,184,106,0.07);
+
+    --done: #4adb9a;
+    --done-bg: rgba(74,219,154,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── Layout ─── */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+  }
+
+  /* ─── Sidebar ─── */
+  .sidebar-header {
+    padding: 1.5rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  .progress-wrap {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .progress-track {
+    height: 3px;
+    background: var(--hint);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 3px;
+    background: var(--done);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .phase-group { padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+
+  .phase-label {
+    padding: 0 1.25rem 0.5rem;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .phase-label.p1 { color: var(--p1d); }
+  .phase-label.p2 { color: var(--p2d); }
+  .phase-label.p3 { color: var(--p3d); }
+
+  .week-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 1.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .week-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+  .week-btn.active {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .week-btn.active.p1 { border-left-color: var(--p1); color: var(--p1); }
+  .week-btn.active.p2 { border-left-color: var(--p2); color: var(--p2); }
+  .week-btn.active.p3 { border-left-color: var(--p3); color: var(--p3); }
+
+  .week-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .week-btn.completed .week-dot {
+    background: var(--done);
+    border-color: var(--done);
+  }
+
+  /* ─── Main content ─── */
+  .week-panel { display: none; }
+  .week-panel.active { display: block; }
+
+  .week-head {
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .week-eyebrow {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .week-eyebrow.p1 { color: var(--p1); }
+  .week-eyebrow.p2 { color: var(--p2); }
+  .week-eyebrow.p3 { color: var(--p3); }
+
+  .week-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .week-goal {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .stat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text);
+  }
+
+  /* Days grid */
+  .days-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .day-card:hover { border-color: var(--border2); }
+
+  .day-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .day-num {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  .day-title-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    padding: 0 16px 12px;
+    padding-top: 10px;
+    line-height: 1.4;
+  }
+
+  .task-list { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 7px; }
+
+  .task-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    cursor: pointer;
+    padding: 7px 9px;
+    border-radius: 7px;
+    transition: background 0.1s;
+    border: 1px solid transparent;
+  }
+
+  .task-row:hover { background: rgba(255,255,255,0.03); border-color: var(--border); }
+
+  .task-row.done { background: var(--done-bg); border-color: rgba(74,219,154,0.15); }
+
+  .chk {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    border: 1.5px solid var(--hint);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .task-row.done .chk {
+    background: var(--done);
+    border-color: var(--done);
+  }
+
+  .chk-mark { display: none; }
+  .task-row.done .chk-mark { display: block; }
+
+  .task-txt {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    transition: color 0.15s;
+  }
+
+  .task-row.done .task-txt { color: var(--done); }
+
+  .task-sub {
+    font-size: 11px;
+    color: var(--hint);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .task-row.done .task-sub { color: rgba(74,219,154,0.5); }
+
+  /* Mindset box */
+  .mindset {
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .mindset.p1 { background: var(--p1bg); border: 1px solid rgba(200,249,122,0.15); color: #a8d960; }
+  .mindset.p2 { background: var(--p2bg); border: 1px solid rgba(126,184,255,0.15); color: #7eb8ff; }
+  .mindset.p3 { background: var(--p3bg); border: 1px solid rgba(255,184,106,0.15); color: #e09a4a; }
+
+  .mindset strong { display: block; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-family: 'DM Mono', monospace; margin-bottom: 6px; opacity: 0.7; }
+
+  /* Resources */
+  .resources-section { margin-bottom: 2rem; }
+  .section-title { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+
+  .res-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+
+  .res-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .res-name { color: var(--text); margin-bottom: 2px; }
+  .res-url { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; }
+  .res-url a { color: inherit; text-decoration: none; }
+  .res-url a:hover { color: var(--p2); }
+
+  /* Weekly outcome */
+  .outcome-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .outcome-title { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+  .outcome-items { display: flex; flex-direction: column; gap: 8px; }
+
+  .outcome-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--text); line-height: 1.5;
+  }
+
+  .outcome-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--done); flex-shrink: 0; margin-top: 5px; }
+
+  /* Quiz */
+  .quiz-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-q {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .quiz-q:last-child { border-bottom: none; }
+  .quiz-q::before { content: 'Q'; position: absolute; left: 0; color: var(--p3d); font-size: 10px; font-family: 'DM Mono', monospace; top: 9px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--hint); border-radius: 2px; }
+
+  /* Dashboard */
+  #dashboard {
+    display: block;
+  }
+
+  .dash-hero {
+    margin-bottom: 2.5rem;
+  }
+
+  .dash-eyebrow {
+    font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+  }
+
+  .dash-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px; color: var(--text); line-height: 1.15; margin-bottom: 12px;
+  }
+
+  .dash-sub { font-size: 14px; color: var(--muted); max-width: 500px; line-height: 1.7; }
+
+  .phase-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 2.5rem;
+  }
+
+  .phase-card {
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    border: 1px solid transparent;
+  }
+
+  .phase-card:hover { transform: translateY(-2px); }
+  .phase-card.p1 { background: var(--p1bg); border-color: rgba(200,249,122,0.2); }
+  .phase-card.p2 { background: var(--p2bg); border-color: rgba(126,184,255,0.2); }
+  .phase-card.p3 { background: var(--p3bg); border-color: rgba(255,184,106,0.2); }
+
+  .pc-days { font-size: 11px; font-family: 'DM Mono', monospace; margin-bottom: 8px; }
+  .p1 .pc-days { color: var(--p1d); }
+  .p2 .pc-days { color: var(--p2d); }
+  .p3 .pc-days { color: var(--p3d); }
+
+  .pc-name { font-family: 'DM Serif Display', serif; font-size: 18px; margin-bottom: 6px; color: var(--text); }
+  .pc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .pc-prog-track { height: 2px; background: rgba(255,255,255,0.07); border-radius: 2px; margin-top: 14px; }
+  .pc-prog-fill { height: 2px; border-radius: 2px; transition: width 0.4s; }
+  .p1 .pc-prog-fill { background: var(--p1); }
+  .p2 .pc-prog-fill { background: var(--p2); }
+  .p3 .pc-prog-fill { background: var(--p3); }
+
+  .all-weeks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+
+  .aw-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .aw-card:hover { border-color: var(--border2); background: var(--surface2); }
+  .aw-card.completed { background: var(--done-bg); border-color: rgba(74,219,154,0.2); }
+
+  .aw-num { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); margin-bottom: 4px; }
+  .aw-name { font-size: 12px; color: var(--text); line-height: 1.4; }
+  .aw-card.completed .aw-name { color: var(--done); }
+
+  @media (max-width: 700px) {
+    .sidebar { width: 200px; }
+    .days-grid { grid-template-columns: 1fr; }
+    .phase-overview-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">90-Day Plan</div>
+      <div class="sidebar-sub">Full-Stack · AI · Soft Skills</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span>Overall progress</span>
+        <span id="global-prog-text">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="global-prog-bar"></div></div>
+    </div>
+
+    <div class="phase-group">
+      <div class="phase-label p1">Phase 1 — Days 1–30</div>
+      <button class="week-btn p1 active" onclick="show('w1')" id="btn-w1"><span class="week-dot"></span>Week 1 — Knowledge audit</button>
+      <button class="week-btn p1" onclick="show('w2')" id="btn-w2"><span class="week-dot"></span>Week 2 — AI mastery</button>
+      <button class="week-btn p1" onclick="show('w3')" id="btn-w3"><span class="week-dot"></span>Week 3 — Communication</button>
+      <button class="week-btn p1" onclick="show('w4')" id="btn-w4"><span class="week-dot"></span>Week 4 — System thinking</button>
+    </div>
+
+    <div class="phase-group">
+      <div class="phase-label p2">Phase 2 — Days 31–60</div>
+      <button class="week-btn p2" onclick="show('w5')" id="btn-w5"><span class="week-dot"></span>Week 5 — Code quality</button>
+      <button class="week-btn p2" onclick="show('w6')" id="btn-w6"><span class="week-dot"></span>Week 6 — DevOps & Cloud</button>
+      <button class="week-btn p2" onclick="show('w7')" id="btn-w7"><span class="week-dot"></span>Week 7 — Problem solving</button>
+      <button class="week-btn p2" onclick="show('w8')" id="btn-w8"><span class="week-dot"></span>Week 8 — Side project v1</button>
+    </div>
+
+    <div class="phase-group">
+      <div class="phase-label p3">Phase 3 — Days 61–90</div>
+      <button class="week-btn p3" onclick="show('w9')" id="btn-w9"><span class="week-dot"></span>Week 9 — Advanced AI + System design</button>
+      <button class="week-btn p3" onclick="show('w10')" id="btn-w10"><span class="week-dot"></span>Week 10 — Testing & reliability</button>
+      <button class="week-btn p3" onclick="show('w11')" id="btn-w11"><span class="week-dot"></span>Week 11 — Leadership & visibility</button>
+      <button class="week-btn p3" onclick="show('w12')" id="btn-w12"><span class="week-dot"></span>Week 12 — Reflect & plan forward</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- WEEK 1 -->
+    <div class="week-panel active" id="w1">
+      <div class="week-head">
+        <div class="week-eyebrow p1">Phase 1 · Week 1 · Days 1–7</div>
+        <div class="week-name">Knowledge audit — all skills</div>
+        <div class="week-goal">Stop assuming you know things. Map your real knowledge across ALL dimensions — coding, AI usage, communication, architecture, and soft skills. What do you truly understand vs what has AI been doing for you?</div>
+      </div>
+      <div class="mindset p1"><strong>Mindset</strong>Don't ask AI to write anything this week. Use it only at the END of each day to quiz you. Studying first, AI second. Brutal honesty is the foundation.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus areas</div><div class="stat-val">All Skills</div></div>
+        <div class="stat-card"><div class="stat-label">Daily study</div><div class="stat-val">60 min</div></div>
+        <div class="stat-card"><div class="stat-label">Coding</div><div class="stat-val">Minimal</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 1</span></div>
+          <div class="day-title-text">Map what you know — honestly, across everything</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">List every technical concept you use daily — OOP, APIs, DB, caching, Docker, CI/CD, etc.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Rate each: "Explain to anyone" / "Use but can't explain" / "Just copy-paste or AI does it"</div><div class="task-sub">Be brutally honest. Nobody sees this.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Do the same audit for soft skills: communication, estimation, documentation, presenting ideas</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Audit your AI usage: list every task you delegate to AI. Which ones could you do without it?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write 5 sentences in your journal: what surprised you most about your own gaps?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 2</span></div>
+          <div class="day-title-text">Core programming concepts — language-agnostic foundations</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: OOP principles (interfaces, abstract classes, inheritance, composition) — understand WHY, not syntax</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study data structures: arrays, hash maps, trees, graphs — when to use each</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Find one design pattern in your project codebase — read every line and understand it fully</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write from memory: implement a simple interface + class. Note where you got stuck.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 3</span></div>
+          <div class="day-title-text">Database & SQL — the most important backend skill</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study the N+1 query problem. Find one example of it in your ecommerce codebase.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Run EXPLAIN on a complex query in your project. Understand every output column.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study index types: B-tree, hash, composite — when they speed up reads vs slow down writes</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Document one slow page in your platform — list all queries it fires</div><div class="task-sub">Don't fix yet. Just understand and document.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 4</span></div>
+          <div class="day-title-text">Async patterns & concurrency — language-agnostic</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study async patterns: callbacks, promises, async/await, event loops — understand the concepts behind them</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Learn concurrency vs parallelism — what's the difference? When does each matter?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study race conditions — what are they, how do they happen, and how to prevent them</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Find an async function in your codebase with missing error handling. Note it.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 5</span></div>
+          <div class="day-title-text">Security fundamentals — OWASP Top 10</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study OWASP Top 10 — understand SQL injection, XSS, CSRF, broken auth at a code level</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Find one place in your project where user input is processed — is it properly sanitized?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: how do authentication tokens work? Sessions vs JWT vs API keys — tradeoffs of each</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Check: does your platform use prepared statements everywhere? Find one that doesn't.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 6</span></div>
+          <div class="day-title-text">Apply — review your own code with new eyes</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Pick a file you wrote in the last 2 weeks. Find 3 things you'd do differently today.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Review one teammate's PR — write 2–3 lines of real, constructive feedback</div><div class="task-sub">Start this habit. Do it every single day from now.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Try solving a small coding task WITHOUT AI — just you and the docs. Time yourself.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 7</span></div>
+          <div class="day-title-text">Review & build your gap map for the next 12 weeks</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Re-read all 6 days of journal notes</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write final gap map: 5 technical gaps, 3 AI usage gaps, 3 communication gaps</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Answer: which of this week's topics would you struggle to explain to a junior developer?</div><div class="task-sub">That becomes your Week 2+ priority.</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="resources-section">
+        <div class="section-title">Key resources this week</div>
+        <div class="res-grid">
+          <div class="res-card"><div class="res-name">OWASP Top 10</div><div class="res-url"><a href="https://owasp.org/www-project-top-ten/" target="_blank">owasp.org</a></div></div>
+          <div class="res-card"><div class="res-name">Big-O Cheat Sheet</div><div class="res-url"><a href="https://www.bigocheatsheet.com/" target="_blank">bigocheatsheet.com</a></div></div>
+          <div class="res-card"><div class="res-name">Refactoring Guru — Patterns</div><div class="res-url"><a href="https://refactoring.guru/design-patterns" target="_blank">refactoring.guru</a></div></div>
+          <div class="res-card"><div class="res-name">Use The Index, Luke — SQL</div><div class="res-url"><a href="https://use-the-index-luke.com/" target="_blank">use-the-index-luke.com</a></div></div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 1</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>A real, written gap map — technical, AI usage, and soft skills — the foundation of your entire 90 days</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Solid understanding of core CS fundamentals, database optimization, security, and async patterns</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>First habit of journaling, code review, and studying without AI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 2 -->
+    <div class="week-panel" id="w2">
+      <div class="week-head">
+        <div class="week-eyebrow p1">Phase 1 · Week 2 · Days 8–14</div>
+        <div class="week-name">AI mastery — prompting, workflows & ethics</div>
+        <div class="week-goal">AI isn't going away. But using it like a crutch vs using it like a power tool are completely different things. This week you learn to be 10x more effective WITH AI — not dependent ON it.</div>
+      </div>
+      <div class="mindset p1"><strong>Mindset</strong>The goal is not to stop using AI. It's to use it so skillfully that you multiply your output while keeping your brain sharp. Learn the craft of prompting.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus areas</div><div class="stat-val">AI · Prompts</div></div>
+        <div class="stat-card"><div class="stat-label">Daily study</div><div class="stat-val">60 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Prompt library</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 8</span></div>
+          <div class="day-title-text">Prompt engineering fundamentals</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study prompt engineering basics: role, context, constraints, examples, output format</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Learn: zero-shot vs few-shot prompting. Chain-of-thought prompting. When to use each.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Take a vague prompt you used recently → rewrite it 3 times, each better than the last</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Compare outputs: how much better is the result with a well-structured prompt?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 9</span></div>
+          <div class="day-title-text">AI for code review, debugging & architecture</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: use AI as a code reviewer — give it code and ask for specific feedback on security, performance, naming</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: rubber-duck debugging with AI — describe a bug, let AI ask you clarifying questions</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: ask AI to critique your architecture decisions — "what are the tradeoffs of this approach?"</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Key rule: ALWAYS verify AI output. Find one case where AI gave you wrong or outdated information today.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 10</span></div>
+          <div class="day-title-text">AI-powered development workflows</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Learn: GitHub Copilot workflows — tab completion, inline chat, slash commands, agents</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Learn: how to write effective .github/copilot-instructions.md or system prompts for your projects</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: Cursor, Windsurf, or other AI coding tools — understand what each does differently</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Create a "prompt library" file — save your best prompts for code review, debugging, test generation, docs</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 11</span></div>
+          <div class="day-title-text">AI for non-coding tasks — docs, emails, planning</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Use AI to draft a technical document — then heavily edit it in YOUR voice. Learn the edit workflow.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Use AI to break down a large task into subtasks with time estimates — then critique its breakdown</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: use AI to improve a professional email or Slack message — maintain your tone</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 12</span></div>
+          <div class="day-title-text">AI ethics, limitations & critical thinking</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: AI hallucinations — when and why do models generate wrong answers? How to detect them?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Understand: security risks of putting proprietary code into AI tools. What's safe? What isn't?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write your personal "AI usage rules" — when you use AI, when you don't, and why</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 13</span></div>
+          <div class="day-title-text">AI for learning & self-teaching</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Use AI as a teacher: ask it to explain a concept you scored "can't explain" in Day 1 — at 3 different levels</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Use AI to generate quiz questions about topics from Week 1 — test yourself WITHOUT looking at notes</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: "Feynman technique" with AI — explain a concept to AI, ask it to point out where you're wrong</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 14</span></div>
+          <div class="day-title-text">Build your personal AI toolkit</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Finalize your prompt library: 10+ tested prompts for code review, debugging, testing, docs, learning</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a 1-page "How I use AI" guide — your personal workflow and rules. Share with your team.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Reflection: what tasks should you NEVER outsource to AI? Write 5 and explain why.</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="resources-section">
+        <div class="section-title">Key resources this week</div>
+        <div class="res-grid">
+          <div class="res-card"><div class="res-name">OpenAI Prompt Engineering Guide</div><div class="res-url"><a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank">platform.openai.com</a></div></div>
+          <div class="res-card"><div class="res-name">Anthropic Prompt Engineering</div><div class="res-url"><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering" target="_blank">docs.anthropic.com</a></div></div>
+          <div class="res-card"><div class="res-name">GitHub Copilot Docs</div><div class="res-url"><a href="https://docs.github.com/en/copilot" target="_blank">docs.github.com</a></div></div>
+          <div class="res-card"><div class="res-name">Prompt Engineering Guide</div><div class="res-url"><a href="https://www.promptingguide.ai/" target="_blank">promptingguide.ai</a></div></div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 2</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>A personal prompt library with 10+ tested, reusable prompts</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Clear understanding of AI strengths, limitations, and security risks</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A personal "AI usage rules" document — you use AI with intention, not habit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 3 -->
+    <div class="week-panel" id="w3">
+      <div class="week-head">
+        <div class="week-eyebrow p1">Phase 1 · Week 3 · Days 15–21</div>
+        <div class="week-name">Communication & professional skills</div>
+        <div class="week-goal">Your ideas only have value if others understand them. Writing clearly, speaking up in meetings, and estimating accurately — these are the skills that get developers promoted.</div>
+      </div>
+      <div class="mindset p1"><strong>Mindset</strong>Communication is engineering too. A developer who can explain things clearly is worth 3 who can't. Start building this muscle now.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Writing · Speaking</div></div>
+        <div class="stat-card"><div class="stat-label">Daily practice</div><div class="stat-val">30 min writing</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">3 documents</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 15</span></div>
+          <div class="day-title-text">Technical writing — write for humans, not machines</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Choose one part of your system a new dev would struggle to understand — write a clear explanation doc</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Include: what it does, why it exists, how it works, and common pitfalls</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Give the doc to a teammate — ask if it makes sense. Revise based on feedback.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 16</span></div>
+          <div class="day-title-text">English communication — emails, Slack, PR descriptions</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study professional email structure: subject, context, ask, close. Practice rewriting 3 of your recent emails.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write 3 PR descriptions this week that explain: what changed, why, and how to test it</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: summarize a complex technical problem in 3 sentences — for a non-technical person</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 17</span></div>
+          <div class="day-title-text">Estimation — the hardest developer skill</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study estimation techniques: task decomposition, buffer for unknowns, 3-point estimation</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Estimate your next 3 real tasks before starting. Log predicted vs actual time after.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Reflect: where did you underestimate? Was it technical complexity, unclear requirements, or something else?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 18</span></div>
+          <div class="day-title-text">Speaking up — meetings, standups, and presenting ideas</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Before the next team meeting: prepare one technical observation or alternative approach to share</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Actually say it in the meeting — even just one clear, well-reasoned point</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice the "SBI" framework: Situation → Behavior → Impact. Use it to give feedback to a peer.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Journal: how did it feel? What was the reaction? Do it again next week — make it a habit.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 19</span></div>
+          <div class="day-title-text">Write a postmortem — structured problem documentation</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Choose a bug or outage from the last month — write a structured postmortem</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Structure: what happened, why, how detected, how fixed, how to prevent</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Focus on systems, not blame. A good postmortem never blames individuals.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 20</span></div>
+          <div class="day-title-text">Requirement analysis — ask the right questions</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: how to analyze vague requirements — ask "what's the user trying to achieve?" not just "what should I build?"</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Take your next task — before coding, write down 5 clarifying questions you should ask</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: convert a vague requirement into a clear user story with acceptance criteria</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 21</span></div>
+          <div class="day-title-text">Phase 1 review — measure your 21-day growth</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Re-read all your journal notes from Week 1, 2, and 3</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">List 5 specific things you now understand that you didn't 3 weeks ago</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write: what are the 3 biggest communication improvements you noticed in yourself?</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="resources-section">
+        <div class="section-title">Key resources this week</div>
+        <div class="res-grid">
+          <div class="res-card"><div class="res-name">Google's Eng Practices — Code Review</div><div class="res-url"><a href="https://google.github.io/eng-practices/review/" target="_blank">google.github.io</a></div></div>
+          <div class="res-card"><div class="res-name">The Art of Readable Code</div><div class="res-url"><a href="https://www.oreilly.com/library/view/the-art-of/9781449318482/" target="_blank">O'Reilly</a></div></div>
+          <div class="res-card"><div class="res-name">Writing for Developers — FreeCodeCamp</div><div class="res-url"><a href="https://www.freecodecamp.org/news/technical-writing-for-developers/" target="_blank">freecodecamp.org</a></div></div>
+          <div class="res-card"><div class="res-name">Postmortem Template — PagerDuty</div><div class="res-url"><a href="https://postmortems.pagerduty.com/" target="_blank">pagerduty.com</a></div></div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 3</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>A technical doc, a postmortem, and improved PR descriptions — real writing practice</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Estimation log with predicted vs actual times — you'll get better every week</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>First experience speaking up in meetings and giving structured feedback</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 4 -->
+    <div class="week-panel" id="w4">
+      <div class="week-head">
+        <div class="week-eyebrow p1">Phase 1 · Week 4 · Days 22–30</div>
+        <div class="week-name">System thinking & architecture</div>
+        <div class="week-goal">Understand how your own platform is built — and where it would break under pressure. Think architecturally. Most developers never do this — you will.</div>
+      </div>
+      <div class="mindset p1"><strong>Mindset</strong>Draw before you code. Plan before you implement. This week forces you to think like a senior engineer.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Architecture · Design</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">90 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">System diagram</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 22</span></div>
+          <div class="day-title-text">Draw your own platform's architecture from memory</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">On paper: draw how a user request flows through your ecommerce system — server, DB, cache, CDN, etc.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Ask your team lead or senior dev to correct your diagram — note what you missed</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Identify: where is the single point of failure in your platform right now?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 23</span></div>
+          <div class="day-title-text">Caching, queues & scalability patterns</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: Redis cache vs full-page cache vs HTTP cache vs CDN cache — when to use each</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study message queues: Redis, RabbitMQ, SQS — what problem do they solve?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">If traffic 10x'd tomorrow, what would crash first in your platform? Database? Sessions? File storage?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 24</span></div>
+          <div class="day-title-text">API design — REST, GraphQL, and beyond</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study REST constraints — statelessness, resource naming, HTTP methods, versioning, pagination</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Understand GraphQL basics — when is it better than REST? When is REST simpler?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Review 3 API endpoints in your project — list any that violate best practices</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 25–26</span></div>
+          <div class="day-title-text">SOLID principles & design patterns</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study all 5 SOLID principles — write one code example for each (in any language you use)</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study key patterns: Repository, Factory, Observer, Strategy — with real ecommerce use cases</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Find a class in your project that violates at least one SOLID principle — document why</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 27–28</span></div>
+          <div class="day-title-text">Learn something new — Python or TypeScript intro</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Pick ONE new language/tool: Python for scripting/AI/automation OR TypeScript for type safety</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Spend 2 hours learning basics — build one small utility script or tool</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Reflection: what concepts from PHP/JS transfer? What's genuinely different?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 29–30</span></div>
+          <div class="day-title-text">Phase 1 review — measure your 30-day growth</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Re-do Day 1's knowledge audit — how has your rating changed across ALL dimensions?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">List 5 things you understand now that you didn't 30 days ago. Be specific.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Identify your top 3 priorities for Phase 2 — be specific about what you still need to build</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Choose your side project idea for Phase 2 (Week 8). Write 3 sentences about what it will be.</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">Phase 1 complete — what you've built in 30 days</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>A real knowledge gap map — technical, AI, and communication — updated with progress</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>AI mastery: prompt library, usage rules, and intentional AI workflows</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Communication: technical docs, estimation habits, speaking up in meetings</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Architecture & patterns: system thinking + SOLID + first exposure to a new language</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 5 -->
+    <div class="week-panel" id="w5">
+      <div class="week-head">
+        <div class="week-eyebrow p2">Phase 2 · Week 5 · Days 31–37</div>
+        <div class="week-name">Code quality & refactoring</div>
+        <div class="week-goal">Write code that your team can maintain, extend, and trust. Refactor something real. Review code like a senior engineer.</div>
+      </div>
+      <div class="mindset p2"><strong>Mindset</strong>Plan your approach for 10 minutes before opening any file. Write it in plain text. This is your new default way of working.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Code · Refactoring</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">90 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Refactored module</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 31–32</span></div>
+          <div class="day-title-text">Refactor a real module — apply SOLID patterns</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Choose the messiest module or class in your project that you're responsible for</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Plan the refactor on paper first — what changes, what stays, what are the risks?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Refactor it applying SOLID — use AI only to review your refactor AFTER you're done</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 33</span></div>
+          <div class="day-title-text">Code review mastery — give feedback like a senior</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Review 2 PRs today — give written feedback with reasons, not just "looks good"</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a personal "code review checklist" — 10 things you now look for in every review</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Share your checklist with a teammate — get their additions</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 34–35</span></div>
+          <div class="day-title-text">Performance profiling & optimization</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Profile one slow endpoint in your project — use browser devtools, Xdebug, or APM tools</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Identify the top 3 hotspots — fix the highest-impact one and measure the improvement</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Fix the slow query from Day 3 — measure before/after with EXPLAIN</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 36–37</span></div>
+          <div class="day-title-text">Build a small API from scratch — no framework</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Build a small REST API without any framework — understand what frameworks actually do for you</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Implement: routing, request handling, response formatting, DB layer — from scratch</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Note every time you hit a problem that a framework normally solves — that's framework understanding</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 5</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>One real refactored module in your project — cleaner, more maintainable</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A personal code review checklist and one real performance fix</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A scratch-built API that shows you understand what frameworks abstract</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 6 -->
+    <div class="week-panel" id="w6">
+      <div class="week-head">
+        <div class="week-eyebrow p2">Phase 2 · Week 6 · Days 38–44</div>
+        <div class="week-name">DevOps, cloud & deployment</div>
+        <div class="week-goal">Understand how your code gets to production — Docker, CI/CD, cloud basics, monitoring. A developer who understands deployment is twice as valuable.</div>
+      </div>
+      <div class="mindset p2"><strong>Mindset</strong>You're not "just a developer." You're an engineer who owns the full lifecycle — from code to production to monitoring.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">DevOps · Cloud</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">90 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Docker + CI/CD</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 38–39</span></div>
+          <div class="day-title-text">Docker — containerize an application</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study Docker concepts: images, containers, volumes, networks, multi-stage builds — not just commands</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a Dockerfile for your API from Week 5 — build and run it locally</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Add docker-compose.yml: app + DB + Redis — make it run with one command</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 40–41</span></div>
+          <div class="day-title-text">CI/CD — automated testing & deployment</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Create a GitHub Actions workflow: on push to main, run tests and lint</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Ask your DevOps person how your real deployment pipeline works — document it</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">What happens when a bad deploy goes out? How do you roll back? Document the answer.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 42</span></div>
+          <div class="day-title-text">Cloud basics — AWS/GCP/Azure fundamentals</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: EC2/VMs, S3/storage, RDS/managed DB, Lambda/serverless — understand the building blocks</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Which cloud services does your platform use? Draw a diagram of the infrastructure.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study secrets management: .env vs secret managers vs CI environment variables — what's safe?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 43–44</span></div>
+          <div class="day-title-text">Logging, monitoring & error tracking</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: what should you log? What NOT to log? (hint: no PII, no passwords, no tokens)</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Set up Sentry (free tier) on your side project — trigger a test error and see it tracked</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Understand structured logging — why JSON logs are better than plain text in production</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 6</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>A Dockerized application running with docker-compose</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A working CI/CD pipeline on GitHub Actions</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Cloud infrastructure understanding + error monitoring set up</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 7 -->
+    <div class="week-panel" id="w7">
+      <div class="week-head">
+        <div class="week-eyebrow p2">Phase 2 · Week 7 · Days 45–51</div>
+        <div class="week-name">Problem solving & critical thinking</div>
+        <div class="week-goal">Stop jumping to code. Learn to break down problems, think through tradeoffs, debug systematically, and make decisions under uncertainty.</div>
+      </div>
+      <div class="mindset p2"><strong>Mindset</strong>The best developers don't type faster — they think better. Problem decomposition is the #1 skill AI can't replace.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Problem Solving</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">60 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Decision doc</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 45–46</span></div>
+          <div class="day-title-text">Systematic debugging — stop guessing</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: scientific method for debugging — hypothesize, test, eliminate. Never "try random things."</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Learn debugging tools deeply: browser DevTools, Xdebug, log analysis, network tab, profilers</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Find and fix a real bug in your project WITHOUT asking AI — document your debugging process step by step</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 47</span></div>
+          <div class="day-title-text">Problem decomposition — break big into small</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Take a large upcoming feature — break it into 10+ small, independent tasks on paper</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">For each subtask: what's the input, output, dependencies, and edge cases?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: explain your decomposition to a teammate. Do they agree? What did you miss?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 48–49</span></div>
+          <div class="day-title-text">Data structures & algorithms — practical patterns</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: Big-O notation — understand time/space complexity for common operations</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Solve 5 LeetCode Easy problems in your preferred language — focus on understanding, not speed</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Find one place in your codebase where the algorithm choice matters — could it be more efficient?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 50–51</span></div>
+          <div class="day-title-text">Decision making — tradeoffs & technical judgment</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: how to evaluate tradeoffs — speed vs quality, build vs buy, simple vs scalable</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a decision document for a real technical choice in your project — list options, pros, cons, recommendation</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: when AI suggests something, ask "why this approach?" and "what are the alternatives?"</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 7</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>Systematic debugging process — no more guessing</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Problem decomposition skill — break anything into manageable parts</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A real technical decision document showing engineering judgment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 8 -->
+    <div class="week-panel" id="w8">
+      <div class="week-head">
+        <div class="week-eyebrow p2">Phase 2 · Week 8 · Days 52–60</div>
+        <div class="week-name">Side project — build v1 yourself</div>
+        <div class="week-goal">Build something real that YOU designed. The entire point is to plan it yourself — AI can help you debug, not think.</div>
+      </div>
+      <div class="mindset p2"><strong>Mindset</strong>Use AI to review your plan and debug errors. NEVER use it to generate the initial design or architecture. That part must be yours.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Build · Ship</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">3–4 hrs</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Side project v1</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 52–53</span></div>
+          <div class="day-title-text">Design everything before touching code</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Define: what problem does your project solve? Who is the user? What are the core features (max 5)?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Design the database schema on paper — tables, columns, relationships, indexes</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Design the API: endpoints, request/response shapes, auth strategy — all before coding</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Ask AI to review your design — "what are the weaknesses in this schema?" — then revise</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 54–58</span></div>
+          <div class="day-title-text">Build the working v1</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Build the core feature first — not a "nice to have", the single most important thing</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Add Docker + CI/CD pipeline (you built these in Week 7 — reuse that knowledge)</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write at least 5 unit tests for core logic — before submitting this as "done"</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Add Sentry error monitoring from Day 50</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 59</span></div>
+          <div class="day-title-text">Document and share it</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a README: what it is, why you built it, how to run it, architecture decisions you made</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Push to GitHub — your first real portfolio piece</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Share with one person — a teammate or developer friend — and get their honest feedback</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 60</span></div>
+          <div class="day-title-text">Phase 2 review — measure your 60-day growth</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Re-read all journal notes from Weeks 5, 6, 7, and 8</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">List 5 specific skills you improved in Phase 2 — code quality, DevOps, problem solving, building</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Honest reflection: where did you still rely on AI when you shouldn't have? Name it specifically.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Identify your top 3 focus areas for Phase 3 — be specific about what still needs work</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">Phase 2 complete — what you've built in 60 days</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>A refactored module + scratch API — you understand code at a deep level</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>DevOps skills: Docker, CI/CD, cloud basics, monitoring — all hands-on</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Problem solving: systematic debugging, decomposition, decision documents</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A real side project you designed yourself — on GitHub, documented, tested</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 9 -->
+    <div class="week-panel" id="w9">
+      <div class="week-head">
+        <div class="week-eyebrow p3">Phase 3 · Week 9 · Days 61–67</div>
+        <div class="week-name">Advanced AI workflows & system design</div>
+        <div class="week-goal">Combine AI mastery with system design thinking. Design systems at scale, use AI as a senior design partner, and think about problems AI can't solve for you.</div>
+      </div>
+      <div class="mindset p3"><strong>Mindset</strong>In Phase 3, you're not just executing — you're thinking about impact, tradeoffs, and the future of your career in an AI-driven world.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">AI · System Design</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">90 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Improvement proposal</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 61–62</span></div>
+          <div class="day-title-text">System design exercise — design a URL shortener</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">On paper: design a URL shortener handling 100M URLs and 10M redirects/day — WITHOUT AI first</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Consider: ID generation, storage, caching, redirect latency, analytics, rate limiting</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">THEN ask AI to critique your design — find the gaps, revise your approach</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 63</span></div>
+          <div class="day-title-text">AI-assisted architecture — use AI as a design partner</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Use AI to brainstorm architecture alternatives for a notification system — compare 3 approaches</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Practice: "adversarial prompting" — ask AI to find flaws in its own suggestions</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Key insight: AI is great at generating options. YOU must make the final decision and own it.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 64</span></div>
+          <div class="day-title-text">System design exercise — your platform's shopping cart</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Design: a cart system handling 1M concurrent users — guest vs logged-in, persistence, merging</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Compare your design to how your actual platform's cart works — what's better? What's worse?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 65–67</span></div>
+          <div class="day-title-text">Write a real improvement proposal + future-proofing</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Identify the most significant technical problem in your platform — write a 1-2 page proposal</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Include: problem, solution, alternatives, risks, effort — use AI to help polish, but YOU own the thinking</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study: what skills will matter most in 3 years? Where should you invest learning time?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Share your proposal with your team lead — get real feedback</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 9</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>2 system design exercises completed — you can think at scale</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Advanced AI workflow: using AI as a design partner, not a crutch</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A real technical proposal showing engineering judgment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 10 -->
+    <div class="week-panel" id="w10">
+      <div class="week-head">
+        <div class="week-eyebrow p3">Phase 3 · Week 10 · Days 68–74</div>
+        <div class="week-name">Testing & reliability</div>
+        <div class="week-goal">Code without tests is a house without foundations. This week you build the habit and understand what to test and why.</div>
+      </div>
+      <div class="mindset p3"><strong>Mindset</strong>Tests aren't extra work. They're the proof that your code does what you said it does.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Testing · TDD</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">90 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Test suite + guide</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 68–69</span></div>
+          <div class="day-title-text">Unit testing — write tests for a core module</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study the testing pyramid: unit, integration, e2e — when to use each level</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write unit tests for a core module in your project — aim for 80% line coverage</div><div class="task-sub">PHPUnit for PHP, Jest for JS/Node</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Learn mocking: how to mock database calls so tests don't need a real DB</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 70</span></div>
+          <div class="day-title-text">Integration testing — test API endpoints end-to-end</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write integration tests for 3 API endpoints in your scratch PHP API — test the full request/response</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Test both happy paths AND error paths — what happens with invalid input, missing auth, etc.?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 71–72</span></div>
+          <div class="day-title-text">TDD practice — write the test first</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Study TDD: Red → Green → Refactor cycle</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Pick one new small feature for your side project — write the tests BEFORE writing the implementation</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">How did TDD change how you thought about the design? Journal your honest reaction.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 73–74</span></div>
+          <div class="day-title-text">Write a testing guide for your team</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a 1-page testing guide: what to test, what not to test, and how to write good test names</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Share with your team — propose adding tests as a PR requirement going forward</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Add your tests to CI so they run on every push — failing tests block the merge</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 10</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>Unit and integration tests written for real code in your project</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>TDD experience — you know when it helps and when it doesn't</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A team testing guide that shows technical leadership</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 11 -->
+    <div class="week-panel" id="w11">
+      <div class="week-head">
+        <div class="week-eyebrow p3">Phase 3 · Week 11 · Days 75–81</div>
+        <div class="week-name">Leadership & visibility</div>
+        <div class="week-goal">Technical skill is invisible if no one sees it. This week you build presence — in your team, in writing, in the developer community.</div>
+      </div>
+      <div class="mindset p3"><strong>Mindset</strong>Leadership at your level isn't a title. It's being the person others turn to — because you're reliable, clear, and generous with your knowledge.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Leadership · Writing</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">60 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Blog post</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 75–76</span></div>
+          <div class="day-title-text">Mentor a junior developer this week</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Choose a concept from your Week 1–8 learning — explain it to a junior dev on your team</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Pair-program with them on a task — observe where they struggle, help without just giving answers</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Reflection: teaching something always shows you where YOUR understanding still has holes</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 77</span></div>
+          <div class="day-title-text">Propose a process improvement to the team</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Identify one process that slows your team down — standups, deployments, code review, planning, etc.</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a short proposal (not a rant — a calm, reasoned suggestion) and bring it up in a meeting</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Whether accepted or not: being the person who proposes improvements is senior behavior</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 78–79</span></div>
+          <div class="day-title-text">Write a public technical post</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write a short post (300–500 words) on LinkedIn or dev.to about something you learned in these 90 days</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Be honest and specific — "here's what I thought I knew, here's what I learned" performs well</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Post it. Don't wait for it to be perfect. Publishing > perfecting.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 80–81</span></div>
+          <div class="day-title-text">Side project — add one feature you designed yourself</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Add a meaningful new feature to your Week 8 side project — apply TDD from Week 10</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Update the README and push — your portfolio is growing</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after week 11</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>First experience mentoring — you'll find it teaches you as much as it teaches them</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A published technical post — your first public developer presence</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A process improvement proposal — visible leadership in action</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 12 -->
+    <div class="week-panel" id="w12">
+      <div class="week-head">
+        <div class="week-eyebrow p3">Phase 3 · Week 12 · Days 82–90</div>
+        <div class="week-name">Reflect, measure & plan forward</div>
+        <div class="week-goal">The last week is not a rest week. It's the most important reflection of your career so far. Measure the real change.</div>
+      </div>
+      <div class="mindset p3"><strong>Mindset</strong>The goal was never to finish 90 days. It was to become the kind of developer who keeps improving because they understand how. Now you do.</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-val">Reflection · Planning</div></div>
+        <div class="stat-card"><div class="stat-label">Daily</div><div class="stat-val">60 min</div></div>
+        <div class="stat-card"><div class="stat-label">Deliverable</div><div class="stat-val">Next 90-day plan</div></div>
+      </div>
+      <div class="days-grid">
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 82–83</span></div>
+          <div class="day-title-text">Re-do your original knowledge audit from Day 1</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Re-rate every concept from Day 1 — technical, AI, communication, soft skills — honestly</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Compare Day 1 ratings vs Day 82 ratings — write down exactly what changed</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Identify: what are your remaining top 3 gaps? Those become your next 90-day priorities.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 84–85</span></div>
+          <div class="day-title-text">Write your 90-day retrospective</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">What were the 5 biggest things you learned — not topics, but insights about how you work and think</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">What habits stuck? What didn't? Why?</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Write honestly: where are you still using AI as a crutch? What's one task you'll commit to doing manually from now on?</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 86–87</span></div>
+          <div class="day-title-text">Portfolio audit — what did you build?</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">List everything you created in 90 days: code, documents, proposals, posts, tests</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Polish your side project README — make it something you'd be proud to show in an interview</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Update your LinkedIn: add the skills and projects you built. You earned them.</div></div></div>
+          </div>
+        </div>
+        <div class="day-card">
+          <div class="day-card-head"><span class="day-num">DAY 88–90</span></div>
+          <div class="day-title-text">Plan your next 90 days</div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Based on your retrospective: define 3 concrete goals for Days 91–180</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Options: deeper system design, open source, Python/Go/Rust, team lead skills, public speaking, AI agents</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">Ask Claude to build you a custom plan for your next 90 days based on what you learned here</div></div></div>
+            <div class="task-row" onclick="toggleTask(this)"><div class="chk"><svg class="chk-mark" width="10" height="8" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="#0d0d0f" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div><div><div class="task-txt">You're no longer a developer who relies on AI to think. You use it to go further. That's the difference.</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="resources-section">
+        <div class="section-title">Reflection resources</div>
+        <div class="res-grid">
+          <div class="res-card"><div class="res-name">The Staff Engineer's Path</div><div class="res-url"><a href="https://www.oreilly.com/library/view/the-staff-engineers/9781098118723/" target="_blank">O'Reilly</a></div></div>
+          <div class="res-card"><div class="res-name">Developer Roadmaps 2025</div><div class="res-url"><a href="https://roadmap.sh/" target="_blank">roadmap.sh</a></div></div>
+          <div class="res-card"><div class="res-name">Levels.fyi — Career levels</div><div class="res-url"><a href="https://www.levels.fyi/" target="_blank">levels.fyi</a></div></div>
+          <div class="res-card"><div class="res-name">Pragmatic Programmer (book)</div><div class="res-url"><a href="https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/" target="_blank">pragprog.com</a></div></div>
+        </div>
+      </div>
+      <div class="outcome-box">
+        <div class="outcome-title">What you'll have after 90 days — the full picture</div>
+        <div class="outcome-items">
+          <div class="outcome-item"><div class="outcome-dot"></div>A real, measurable knowledge upgrade across coding, AI skills, communication, system design, and DevOps</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>AI mastery: prompt library, usage rules, AI as a design partner — intentional, not dependent</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A side project built and designed by you — tested, dockerized, documented, on GitHub</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Communication portfolio: technical docs, proposals, postmortems, decision documents, blog post</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Team visibility: code reviews, mentoring, process proposals, speaking up in meetings</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>Problem-solving skills: systematic debugging, decomposition, critical thinking</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A healthy relationship with AI — as a power tool you use with judgment, not a crutch</div>
+          <div class="outcome-item"><div class="outcome-dot"></div>A clear, honest plan for the next 90 days</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.week-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('btn-' + id).classList.add('active');
+  }
+
+  function toggleTask(el) {
+    el.classList.toggle('done');
+    updateProgress();
+    saveProgress();   // ← NEW
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.task-row').length;
+    const done = document.querySelectorAll('.task-row.done').length;
+    const pct = total > 0 ? Math.round(done / total * 100) : 0;
+    document.getElementById('global-prog-bar').style.width = pct + '%';
+    document.getElementById('global-prog-text').textContent = pct + '%';
+
+    document.querySelectorAll('.week-panel').forEach(panel => {
+      const id = panel.id;
+      const tasks = panel.querySelectorAll('.task-row');
+      const doneTasks = panel.querySelectorAll('.task-row.done');
+      const btn = document.getElementById('btn-' + id);
+      if (btn && tasks.length > 0 && doneTasks.length === tasks.length) {
+        btn.classList.add('completed');
+      } else if (btn) {
+        btn.classList.remove('completed');
+      }
+    });
+  }
+
+  // ─── NEW: Save & Load using localStorage ───
+
+  function saveProgress() {
+    const tasks = document.querySelectorAll('.task-row');
+    const state = [];
+    tasks.forEach((task, index) => {
+      state.push(task.classList.contains('done'));
+    });
+    localStorage.setItem('studyPlanProgress', JSON.stringify(state));
+  }
+
+  function loadProgress() {
+    const saved = localStorage.getItem('studyPlanProgress');
+    if (!saved) return;
+
+    const state = JSON.parse(saved);
+    const tasks = document.querySelectorAll('.task-row');
+    tasks.forEach((task, index) => {
+      if (state[index] === true) {
+        task.classList.add('done');
+      }
+    });
+    updateProgress();
+  }
+
+  // Load saved progress when the page opens
+  window.addEventListener('DOMContentLoaded', loadProgress);
+</script>
+</body>
+</html>
