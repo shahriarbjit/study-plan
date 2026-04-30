@@ -21,25 +21,25 @@ Understand async patterns, concurrency vs parallelism, race conditions, and iden
 ## 1) Async Patterns Study
 
 ### Callback
-- Definition in your own words:
-- Simple example:
+- Definition in your own words: return function through another function by an arguments
+- Simple example: 
 - When to use:
 - Risks:
 
 ### Promise/Future
-- Definition in your own words:
+- Definition in your own words: its hold the result. by reject,fail,success,pending
 - Simple example:
 - When to use:
 - Risks:
 
 ### Async/Await
-- Definition in your own words:
+- Definition in your own words: the update version of promise
 - Simple example:
 - When to use:
 - Risks:
 
 ### Event Loop
-- Definition in your own words:
+- Definition in your own words: coding flow of async await 
 - What runs first: sync code / microtasks / macrotasks:
 - One bug pattern caused by misunderstanding event loop:
 
@@ -48,27 +48,28 @@ Understand async patterns, concurrency vs parallelism, race conditions, and iden
 ## 2) Concurrency vs Parallelism
 
 ### Concurrency
-- Definition in your own words:
+- Definition in your own words: its execute one after one
 - Real example from backend:
 
 ### Parallelism
-- Definition in your own words:
+- Definition in your own words: its execute once at a time
 - Real example from backend:
 
 ### Key difference in one sentence:
 
 ### When each matters in your current project:
-- Concurrency matters when:
-- Parallelism matters when:
+- Concurrency matters when: online order for a indvidual user
+- Parallelism matters when: payment
 
 ---
 
 ## 3) Race Conditions
 
 ### What is a race condition?
+- in same table when send data from multiple user
 
 ### How race conditions happen (your own words):
-
+- product stock
 ### One practical ecommerce example:
 
 ### Common prevention strategies
